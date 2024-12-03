@@ -12,10 +12,10 @@ pub struct Blog {
 impl Blog {
     pub fn new(title: String, content: String, tags: Vec<String>) -> Self {
         Self {
-            title: String::new(),
+            title,
             date: time(),
-            content: String::new(),
-            tags: Vec::new()
+            content,
+            tags
         }
     }
 }
