@@ -16,7 +16,7 @@ fn add_blog(title: String, content: String, tags: Vec<String>) -> Result<Blog, S
         return Err("Content is too long!".to_string())
     }
 
-    if tags > 3 {
+    if tags.len() > 3 {
         return Err("Too many tags!".to_string())
     }
 
