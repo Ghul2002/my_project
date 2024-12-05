@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { my_project_backend } from 'declarations/my_project_backend/index';
-let blogs = ref([]);
+const blogs = ref([]);
+const tags = ref([])
 
 async function handleSubmit(e) {
   e.preventDefault();
@@ -25,6 +26,16 @@ async function getBlogs() {
     }
   })
 }
+
+function saveTag() {
+  const tagsContent = document.querySelector('#tags').value;
+  tags.value.push(tagsContent)
+  document.querySelector('#tags').value = "";
+}
+
+function removeTag(id) {
+  tags.value.splice(id, 1);
+}
 getBlogs()
 </script>
 
@@ -33,48 +44,120 @@ getBlogs()
     <img src="/logo2.svg" alt="DFINITY logo" class="mx-auto mt-4"/>
     <br />
     <br />
-    <form class="grid gap-4 pb-4 mb-4 border-sold border-b-2 border-sky-500" action="#" @submit="handleSubmit">
+    <form class="grid gap-4 pb-4 mb-4 border-sold border-b-2 border-emerald-700" action="#" @submit="handleSubmit">
       <div>
-        <p class="text-white"> Title: </p>
+        <p class="text-white font-bold "> Title: </p>
         <input 
         id="title" 
         alt="title" 
-        type="text" 
-        class="w-full rounded-full py-1 px-4 outline-none border-solid border-2 hover:border-emerald-700"/>
+        type="text"
+        v-on:keyup.enter="saveTag"
+        class="
+        w-full 
+        rounded-full 
+        py-1 
+        px-4 
+        outline-none 
+        border-solid 
+        border-2 
+        transition 
+        duration-150 
+        ease out 
+        hover:border-emerald-700
+        "/>
       </div>
       <div>
-        <p class="text-white">Content: </p>
+        <p class="text-white font-bold ">Content: </p>
         <textarea
         id="content" 
         alt="content" 
         type="text" 
-        class="w-full rounded-3xl py-1 px-4 outline-none min-h-[100p] border-solid border-2 hover:border-emerald-700">
+        class="
+        w-full 
+        rounded-3xl 
+        py-1 
+        px-4 
+        outline-none 
+        min-h-[100p] 
+        border-solid 
+        border-2 
+        transition 
+        duration-150 
+        ease-in-out 
+        hover:border-emerald-700
+        ">
         </textarea>
       </div>
       <div>
-        <p class="text-white">Tags: </p>
+        <p class="text-white font-bold ">Tags: </p>
         <input 
         id="tags" 
         alt="tags" 
         type="text"
-        class="w-full rounded-full py-1 px-4 outline-none border-solid border-2 hover:border-emerald-700" />
+        v-on:keyup.enter="saveTag"
+        class="
+        w-full 
+        rounded-full 
+        py-1 
+        px-4 
+        outline-none 
+        border-solid 
+        border-2 
+        transition 
+        duration-150 
+        ease-in-out 
+        hover:border-emerald-700
+        "/>
+        <div class="flex gap-1 flex-wrap my-2">
+          <div v-for="(tag, id) in tags" class="
+          text-white 
+          bg-indigo-400 
+          rounded-3xl 
+          py-1 
+          px-3
+          text-sm
+          w-fit" @click="removeTag(id)">
+          {{ tag }}
+        </div></div>
       </div>
+      <div></div>
       <div class="flex justify-end">
         <button 
         type="submit" 
-        class="text-white bg-emerald-700 rounded-full py-1 px-4 outline-none ">
+        class="text-white 
+        bg-emerald-700 
+        rounded-full 
+        py-1 
+        px-4 
+        outline-none 
+        transition 
+        duration-150 
+        ease-in-out
+        hover:scale-110
+        ">
         Click to add!
       </button>
       </div>
-
     </form>
-    <div>
-      <div v-for="blog in blogs">
-        <h3>{{ blog.title }}</h3>
+    <div class="text-white">
+      <div v-for="blog in blogs" class="pb-4 border-solid border-b-2 border-emerald-700">
+        <div class="mb-1 text-right">
+          {{ new Date(Number(blog.date) /1_000_000).toLocaleString()}}
+        </div>
+        <h3 class="text-xl mb-2">{{ blog.title }}</h3>
         <p>{{ blog.content }}</p>
-        <div>
-          {{ blog.date }}
-          {{ blog.tags }}
+        <div class="mt-2">
+          <div class="flex gap-4 flex-wrap">
+          <div v-for="tag in blog.tags" class="
+          bg-emerald-700 
+          rounded-full 
+          py-1 
+          px-4 
+          my-1 
+          outline-none 
+          w-fit 
+          "> {{ tag }}</div>
+        </div>
         </div>
       </div>
     </div>
